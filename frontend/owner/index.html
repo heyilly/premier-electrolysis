@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Owner Portal – Premier Electrolysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ── AUTH ── -->
+<div id="auth-wrap" class="auth-wrap">
+  <div class="auth-box">
+    <div class="auth-logo">Premier Electrolysis · Owner Portal</div>
+    <h1 class="auth-h1">Sign <em>in</em></h1>
+    <div class="gold-rule"></div>
+    <div class="field"><label>Email</label><input type="email" id="login-email" placeholder="ambar@premierelectrolysis.com"></div>
+    <div class="field"><label>Password</label><input type="password" id="login-pass" onkeydown="if(event.key==='Enter') doLogin()"></div>
+    <div class="err" id="login-err"></div>
+    <button class="btn-gold" onclick="doLogin()">Sign in</button>
+  </div>
+</div>
+
+<!-- ── TOP NAV ── -->
+<div class="topnav" id="topnav" style="display:none">
+  <span class="topnav-logo">Premier Electrolysis</span>
+  <!-- nav group hidden on non-calendar pages -->
+  <span id="cal-nav-group" style="display:contents">
+    <button class="cal-nav-btn" onclick="navPrev()">&#8249;</button>
+    <span class="cal-title" id="cal-title">—</span>
+    <button class="cal-nav-btn" onclick="navNext()">&#8250;</button>
+    <button class="today-btn" id="today-btn" onclick="goToday()">Today</button>
+  </span>
+  <div class="view-toggle" id="view-toggle-group">
+    <button class="view-btn active" id="vbtn-day"   onclick="setView('day')">Day</button>
+    <button class="view-btn"        id="vbtn-week"  onclick="setView('week')">Week</button>
+    <button class="view-btn"        id="vbtn-month" onclick="setView('month')">Month</button>
+  </div>
+  <span id="nav-name" style="font-size:11px;color:rgba(245,241,234,0.45);margin-left:8px"></span>
+  <button class="signout-btn" onclick="logout()">Sign out</button>
+</div>
+
+<!-- ── MAIN LAYOUT ── -->
+<div class="layout" id="app-layout" style="display:none">
+
+  <!-- ── LEFT PANEL ── -->
+  <div class="left-panel">
+    <!-- Page nav links -->
+    <div class="nav-links-section">
+      <div class="nav-link active" id="nl-calendar" onclick="showMainPage('calendar')">
+        <span class="nav-link-icon">📅</span> Calendar
+      </div>
+      <div class="nav-link" id="nl-clients" onclick="showMainPage('clients')">
+        <span class="nav-link-icon">👤</span> Clients
+      </div>
+    </div>
+
+    <!-- Availability tools (shown only on calendar page) -->
+    <div id="avail-tools">
+      <div class="panel-section">
+        <div class="panel-title">Availability Tools</div>
+
+        <div class="avail-toggles">
+          <button class="avail-toggle available active" onclick="setAvailType('available',this)">Available</button>
+          <button class="avail-toggle blocked"          onclick="setAvailType('blocked',this)">Blocked</button>
+          <button class="avail-toggle blackout"         onclick="setAvailType('blackout',this)">Blackout</button>
+        </div>
+
+        <div class="time-row">
+          <div class="field"><label>Start</label><input type="time" id="avail-start" value="09:00"></div>
+          <div class="field"><label>End</label>  <input type="time" id="avail-end"   value="17:00"></div>
+        </div>
+
+        <div class="buffer-row">
+          <span>Buffer between appointments:</span>
+          <span class="buffer-chip">30 min</span>
+        </div>
+
+        <button class="repeat-btn" onclick="toggleRepeat()">↻ Repeat</button>
+
+        <div class="repeat-panel" id="repeat-panel" style="display:none">
+          <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--stone);margin-bottom:8px">Repeat on</div>
+          <div class="repeat-days">
+            <label class="day-check"><input type="checkbox" class="repeat-day" value="monday">    Mon</label>
+            <label class="day-check"><input type="checkbox" class="repeat-day" value="tuesday">   Tue</label>
+            <label class="day-check"><input type="checkbox" class="repeat-day" value="wednesday"> Wed</label>
+            <label class="day-check"><input type="checkbox" class="repeat-day" value="thursday">  Thu</label>
+            <label class="day-check"><input type="checkbox" class="repeat-day" value="friday">    Fri</label>
+            <label class="day-check"><input type="checkbox" class="repeat-day" value="saturday">  Sat</label>
+            <label class="day-check"><input type="checkbox" class="repeat-day" value="sunday">    Sun</label>
+          </div>
+          <div class="field" style="margin:8px 0 0"><label>Ends on (optional)</label><input type="date" id="repeat-end"></div>
+        </div>
+
+        <button class="apply-btn" onclick="applyAvailability()">Apply to selected date</button>
+        <div class="success-msg" id="avail-msg" style="display:none">✓ Availability saved</div>
+      </div>
+    </div>
+  </div><!-- /left-panel -->
+
+  <!-- ── CENTER ── -->
+  <div class="cal-panel">
+
+    <!-- CALENDAR PAGE -->
+    <div class="page active" id="page-calendar">
+      <div class="cal-body" id="cal-body"></div>
+    </div>
+
+    <!-- CLIENTS LIST PAGE -->
+    <div class="page" id="page-clients">
+      <div class="page-wrap">
+        <div class="page-eyebrow">All clients</div>
+        <h2 class="page-title">Client <em>roster</em></h2>
+        <div class="gold-rule"></div>
+        <input class="search-bar" type="text" placeholder="Search by name or email…" oninput="filterClients(this.value)">
+        <table class="clients-table">
+          <thead><tr>
+            <th>Name</th><th>Email</th><th>Phone</th><th>Since</th><th>Status</th>
+          </tr></thead>
+          <tbody id="clients-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CLIENT PROFILE PAGE -->
+    <div class="page" id="page-profile">
+      <div class="page-wrap">
+        <button class="back-btn" onclick="showMainPage('clients')">← Back to clients</button>
+
+        <div class="profile-hdr">
+          <div class="profile-avatar" id="prof-avatar">A</div>
+          <div>
+            <div class="profile-name" id="prof-name">—</div>
+            <div class="profile-meta" id="prof-meta">—</div>
+          </div>
+        </div>
+
+        <div class="profile-tabs">
+          <div class="profile-tab active" onclick="showProfileTab('bookings',this)">Bookings</div>
+          <div class="profile-tab"        onclick="showProfileTab('sessions',this)">Sessions</div>
+          <div class="profile-tab"        onclick="showProfileTab('photos',this)">Photos</div>
+          <div class="profile-tab"        onclick="showProfileTab('fees',this)">Fees</div>
+        </div>
+
+        <!-- Bookings -->
+        <div id="ptab-bookings" class="profile-section active">
+          <div id="profile-bookings"></div>
+        </div>
+
+        <!-- Sessions -->
+        <div id="ptab-sessions" class="profile-section">
+          <div class="session-form">
+            <h3>Log new session</h3>
+            <div class="field"><label>Date &amp; time</label><input type="datetime-local" id="ses-date"></div>
+            <div class="field">
+              <label>Notes</label>
+              <textarea id="ses-notes" rows="2"
+                style="width:100%;border:1px solid rgba(196,169,109,0.25);padding:8px 10px;resize:vertical;font-size:13px;outline:none"></textarea>
+            </div>
+            <p style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--stone);margin-bottom:8px">Treatment areas</p>
+            <div id="area-rows"></div>
+            <button class="add-area-btn" onclick="addAreaRow()">+ Add area</button>
+            <div style="display:flex;gap:10px;align-items:center">
+              <button class="btn-dark" style="flex:1;padding:9px" onclick="submitSession()">Save session</button>
+              <div class="success-msg" id="ses-msg" style="display:none">✓ Saved</div>
+            </div>
+          </div>
+          <div id="profile-sessions"></div>
+        </div>
+
+        <!-- Photos -->
+        <div id="ptab-photos" class="profile-section">
+          <div style="display:flex;gap:10px;margin-bottom:10px">
+            <div class="field" style="flex:1;margin:0">
+              <label>Type</label>
+              <select id="upload-type">
+                <option value="before">Before</option>
+                <option value="after">After</option>
+                <option value="progress">Progress</option>
+              </select>
+            </div>
+            <div class="field" style="flex:1;margin:0">
+              <label>Treatment area</label>
+              <input type="text" id="upload-area" placeholder="e.g. upper lip">
+            </div>
+          </div>
+          <div class="upload-zone" onclick="document.getElementById('photo-input').click()">
+            <p>Click to upload · JPEG, PNG, WebP</p>
+          </div>
+          <input type="file" id="photo-input" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="uploadPhoto()">
+          <div class="success-msg" id="upload-msg" style="display:none">✓ Uploaded</div>
+          <div class="photo-grid-owner" id="profile-photos"></div>
+        </div>
+
+        <!-- Fees -->
+        <div id="ptab-fees" class="profile-section">
+          <div id="profile-fees"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /cal-panel -->
+
+  <!-- ── RIGHT PANEL ── -->
+  <div class="right-panel">
+
+    <!-- Pending requests -->
+    <div class="rp-section">
+      <div class="rp-title">
+        Pending <span class="rp-count" id="rp-count" style="display:none">0</span>
+      </div>
+      <div id="pending-list">
+        <p class="empty-state" style="padding:8px 0;font-size:12px">No pending requests</p>
+      </div>
+    </div>
+
+    <!-- Add appointment manually -->
+    <div class="rp-section">
+      <button class="add-appt-btn" onclick="openAddApptModal()">
+        ＋ Add Appointment Manually
+      </button>
+      <p style="font-size:11px;color:var(--stone);margin-top:8px;line-height:1.6">
+        Create a confirmed booking for a phone or walk-in client.
+      </p>
+    </div>
+
+    <!-- Schedule check -->
+    <div class="rp-section">
+      <div class="rp-title">Schedule Check</div>
+      <div class="check-item"><span class="check-dot pass"></span> Within available hours</div>
+      <div class="check-item"><span class="check-dot pass"></span> No booking overlap</div>
+      <div class="check-item"><span class="check-dot pass"></span> 30 min buffer maintained</div>
+    </div>
+
+  </div><!-- /right-panel -->
+
+</div><!-- /layout -->
+
+<!-- ── ADD APPOINTMENT MODAL ── -->
+<div class="modal-overlay" id="add-appt-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('add-appt-modal')">×</button>
+    <div class="modal-title">Add <em>appointment</em></div>
+    <div class="gold-rule"></div>
+
+    <div class="form-row">
+      <div class="field"><label>First name</label><input type="text" id="m-fname" placeholder="First"></div>
+      <div class="field"><label>Last name</label> <input type="text" id="m-lname" placeholder="Last"></div>
+    </div>
+    <div class="field"><label>Email</label><input type="email" id="m-email" placeholder="client@email.com"></div>
+    <div class="field"><label>Phone</label><input type="tel"   id="m-phone" placeholder="(346) 000-0000"></div>
+    <div class="field">
+      <label>Service</label>
+      <select id="m-service">
+        <option value="Consultation:0:60">Consultation — Complimentary (60 min)</option>
+        <option value="15-Minute Session:4500:15">15-Minute Session — $45</option>
+        <option value="30-Minute Session:8000:30">30-Minute Session — $80</option>
+        <option value="60-Minute Session:14500:60">60-Minute Session — $145</option>
+        <option value="90-Minute Session:21000:90">90-Minute Session — $210</option>
+        <option value="2-Hour Session:27000:120">2-Hour Session — $270</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Date</label>       <input type="date" id="m-date"></div>
+      <div class="field"><label>Start time</label> <input type="time" id="m-time"></div>
+    </div>
+    <div class="field"><label>Treatment area</label><input type="text" id="m-area"  placeholder="e.g. upper lip, chin"></div>
+    <div class="field"><label>Internal note</label> <input type="text" id="m-notes" placeholder="Optional"></div>
+    <div class="err" id="m-err"></div>
+
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('add-appt-modal')">Cancel</button>
+      <button class="btn-dark"  onclick="submitManualAppt()">Confirm booking</button>
+    </div>
+  </div>
+</div>
+
+<!-- JS: load in order -->
+<script src="js/auth.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/bookings.js"></script>
+<script src="js/clients.js"></script>
+</body>
+</html>

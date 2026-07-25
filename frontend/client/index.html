@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account – Premier Electrolysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ── AUTH ── -->
+<div id="auth-wrap" class="auth-wrap">
+  <div class="auth-box">
+    <div class="auth-logo">Premier Electrolysis of Houston</div>
+
+    <!-- Login -->
+    <div id="login-panel">
+      <h1 class="auth-h1">Welcome <em>back</em></h1>
+      <div class="gold-rule"></div>
+      <div class="field"><label>Email</label><input type="email" id="login-email" placeholder="your@email.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="login-pass" onkeydown="if(event.key==='Enter') doLogin()"></div>
+      <div class="err" id="login-err"></div>
+      <button class="btn-gold" onclick="doLogin()">Sign in</button>
+      <p class="auth-toggle">New client? <a onclick="toggleAuth('register')">Create an account</a></p>
+    </div>
+
+    <!-- Register -->
+    <div id="register-panel" style="display:none">
+      <h1 class="auth-h1"><em>Create</em> account</h1>
+      <div class="gold-rule"></div>
+      <div class="two-col">
+        <div class="field"><label>First name</label><input type="text" id="reg-fname" placeholder="First"></div>
+        <div class="field"><label>Last name</label><input type="text" id="reg-lname" placeholder="Last"></div>
+      </div>
+      <div class="field"><label>Email</label><input type="email" id="reg-email" placeholder="your@email.com"></div>
+      <div class="field"><label>Phone</label><input type="tel" id="reg-phone" placeholder="(346) 000-0000"></div>
+      <div class="field"><label>Password</label><input type="password" id="reg-pass" placeholder="Min 6 characters"></div>
+      <div class="err" id="reg-err"></div>
+      <button class="btn-gold" onclick="doRegister()">Create account</button>
+      <p class="auth-toggle">Already have an account? <a onclick="toggleAuth('login')">Sign in</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ── APP ── -->
+<div id="app" class="app">
+  <nav>
+    <span class="nav-logo">Premier Electrolysis</span>
+    <div class="nav-right">
+      <span id="nav-name"></span>
+      <button onclick="logout()">Sign out</button>
+    </div>
+  </nav>
+
+  <div class="tabs">
+    <div class="tab active" id="tab-book"     onclick="showTab('book')">Book a session</div>
+    <div class="tab"        id="tab-bookings" onclick="showTab('bookings')">My appointments</div>
+    <div class="tab"        id="tab-sessions" onclick="showTab('sessions')">Session history</div>
+    <div class="tab"        id="tab-photos"   onclick="showTab('photos')">My photos</div>
+  </div>
+
+  <!-- ── BOOK TAB ── -->
+  <div id="tab-book-content" class="content">
+    <div class="eyebrow">New appointment</div>
+    <h2 class="section-title">Reserve a <em>session</em></h2>
+    <div class="gold-rule"></div>
+
+    <div class="step-bar">
+      <div class="step active" id="bk-pill-1">Service</div>
+      <div class="step"        id="bk-pill-2">Date &amp; time</div>
+      <div class="step"        id="bk-pill-3">Confirm</div>
+    </div>
+
+    <!-- Step 1: service -->
+    <div id="bk-s1">
+      <div id="svc-list"></div>
+      <button class="btn-dark" id="bk-next-1"
+              style="opacity:0.35;pointer-events:none;margin-top:16px"
+              onclick="bkGo(2)">Continue →</button>
+    </div>
+
+    <!-- Step 2: date & time -->
+    <div id="bk-s2" style="display:none">
+      <div class="cal-wrap">
+        <div class="cal-head">
+          <button class="cal-nav" onclick="calNav(-1)">‹</button>
+          <span id="cal-label"></span>
+          <button class="cal-nav" onclick="calNav(1)">›</button>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+
+      <div id="time-area" style="display:none">
+        <p style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);margin-bottom:10px">
+          Available times
+        </p>
+        <div class="time-grid" id="time-grid"></div>
+      </div>
+
+      <button class="btn-dark" id="bk-next-2"
+              style="opacity:0.35;pointer-events:none"
+              onclick="bkGo(3)">Continue →</button>
+      <button class="btn-ghost" onclick="bkGo(1)">← Back</button>
+    </div>
+
+    <!-- Step 3: confirm -->
+    <div id="bk-s3" style="display:none">
+      <div class="summary-box">
+        <p style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:14px">
+          Appointment summary
+        </p>
+        <div class="sum-row"><span class="sum-label">Service</span><span id="sum-svc">—</span></div>
+        <div class="sum-row"><span class="sum-label">Date</span><span id="sum-date">—</span></div>
+        <div class="sum-row"><span class="sum-label">Time</span><span id="sum-time">—</span></div>
+        <div class="sum-total">
+          <span class="sum-total-label">Total due at session</span>
+          <span class="sum-total-val" id="sum-price">—</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Notes for Ambar (optional)</label>
+        <input type="text" id="bk-notes" placeholder="Treatment area, questions, sensitivities...">
+      </div>
+      <button class="btn-dark" id="bk-submit-btn" onclick="submitBooking()">Request appointment</button>
+      <button class="btn-ghost" onclick="bkGo(2)">← Back</button>
+    </div>
+  </div>
+
+  <!-- ── MY APPOINTMENTS TAB ── -->
+  <div id="tab-bookings-content" class="content" style="display:none">
+    <div class="eyebrow">Your schedule</div>
+    <h2 class="section-title">My <em>appointments</em></h2>
+    <div class="gold-rule"></div>
+    <div id="pending-notice" class="pending-notice" style="display:none">
+      <div class="pending-notice-icon">⏳</div>
+      <div>
+        <p>
+          <strong>Appointment request received</strong>
+          Your request has been sent to Ambar. You'll be notified once it's confirmed — usually within one business day.
+        </p>
+      </div>
+    </div>
+    <div id="bookings-list"><p class="loading">Loading…</p></div>
+  </div>
+
+  <!-- ── SESSION HISTORY TAB ── -->
+  <div id="tab-sessions-content" class="content" style="display:none">
+    <div class="eyebrow">Visit records</div>
+    <h2 class="section-title">Session <em>history</em></h2>
+    <div class="gold-rule"></div>
+    <div id="sessions-list"><p class="loading">Loading…</p></div>
+  </div>
+
+  <!-- ── PHOTOS TAB ── -->
+  <div id="tab-photos-content" class="content" style="display:none">
+    <div class="eyebrow">Progress gallery</div>
+    <h2 class="section-title">My <em>photos</em></h2>
+    <div class="gold-rule"></div>
+    <div class="photo-type-filter">
+      <button class="type-btn active" onclick="filterPhotos('all',this)">All</button>
+      <button class="type-btn" onclick="filterPhotos('before',this)">Before</button>
+      <button class="type-btn" onclick="filterPhotos('after',this)">After</button>
+      <button class="type-btn" onclick="filterPhotos('progress',this)">Progress</button>
+    </div>
+    <div id="photo-grid" class="photo-grid"></div>
+  </div>
+</div>
+
+<!-- JS: load in order — auth first, then booking, then data -->
+<script src="js/auth.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/data.js"></script>
+</body>
+</html>

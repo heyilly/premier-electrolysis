@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Environment — NEVER push this
+.env
+backend/.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+
+# Uploads
+*.zip

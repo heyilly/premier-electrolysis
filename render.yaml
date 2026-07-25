@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: premier-electrolysis-api
+    runtime: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: premier-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_ORIGINS
+        value: https://premierelectrolysis.com,https://www.premierelectrolysis.com
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "1440"
+
+databases:
+  - name: premier-db
+    databaseName: premier
+    user: premier_user
+    plan: free
