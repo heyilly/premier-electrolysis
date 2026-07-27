@@ -1,5 +1,5 @@
 // ── CONFIG ────────────────────────────────────────────────────────────────────
-const API = 'http://localhost:8000';
+const API = 'http://98.84.133.32';
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
