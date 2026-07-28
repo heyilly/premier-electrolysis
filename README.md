@@ -1,200 +1,156 @@
-# Premier Electrolysis – Full Platform
+# Premier Electrolysis of Houston
 
-## Project structure
+A full-stack booking and client management platform built for a Houston electrolysis studio. This is a live demo deployment on AWS.
+
+---
+
+## Live URLs
+
+| Portal | URL |
+|--------|-----|
+| Public site | https://d4yqdbub69k9y.cloudfront.net |
+| Client portal | https://d4yqdbub69k9y.cloudfront.net/client/index.html |
+| Owner portal | https://d4yqdbub69k9y.cloudfront.net/owner/index.html |
+
+---
+
+## Test Accounts
+
+### Owner — Ambar
+Log into the **Owner Portal** with these credentials.
+
+| Field | Value |
+|-------|-------|
+| Email | ambar@premierelectrolysis.com |
+| Password | pass1 |
+
+### Test Client — Orange Tree
+Log into the **Client Portal** with these credentials.
+
+| Field | Value |
+|-------|-------|
+| Email | ot@gmail.com |
+| Password | 8characters |
+
+---
+
+## Creating a New Client Account
+
+Go to the Client Portal and click **Create an account**. Fill in your first name, last name, email, phone, and a password of at least 6 characters. You will be logged in immediately after registering.
+
+---
+
+## Client Portal — What You Can Do
+
+**Book a session**
+
+Open the Book a session tab. Select a service from the list — options range from a complimentary consultation to a 2-hour session. Once you select a service the Continue button activates. Click it to move to the calendar. Pick an available date, then pick a time slot from the options that appear below the calendar. Click Continue again to reach the confirmation screen where you can add optional notes for Ambar. Click Request appointment to submit.
+
+After submitting you are taken directly to the My appointments tab where your new booking appears with a Pending status and a notice that Ambar will confirm it shortly.
+
+**My appointments**
+
+This tab shows all your bookings sorted by date. Each booking shows the service name, time, and current status. Statuses you may see: Pending, Confirmed, Completed, Cancelled, No-show.
+
+**Session history**
+
+After each completed visit, Ambar logs a session record. This tab shows each past visit with the treatment areas, intensity levels used, and any notes Ambar added about your skin.
+
+**My photos**
+
+Ambar uploads before, after, and progress photos to your profile. They appear here organized by type. Use the filter buttons at the top to view only Before, only After, or only Progress photos.
+
+---
+
+## Owner Portal — What You Can Do
+
+**Calendar**
+
+The calendar opens by default when you log in. Use the Day, Week, and Month buttons in the top bar to switch views. The left and right arrows navigate between time periods. The Today button returns you to the current date.
+
+In Day and Week view, confirmed appointments appear as dark green blocks, pending requests appear as yellow dashed blocks. Click any date in Month view to drill into that day.
+
+**Availability Tools**
+
+The left panel contains availability tools. Select Available, Blocked, or Blackout depending on what you want to set. Use the Start and End time fields to define the hours. Click the Repeat button to open recurring options — check the days of the week you want the schedule to apply to and optionally set an end date. Click Apply to selected date to save.
+
+**Pending requests**
+
+The right panel shows all pending booking requests from clients. Each card shows the client name, date, time, and service requested. Click Approve to confirm the booking. Click Decline to cancel it. The top card is flagged as the top match.
+
+**Add Appointment Manually**
+
+Below the pending requests is an Add Appointment Manually button. Use this when a client calls by phone or walks in. Click it to open a form. Fill in the client's first name, last name, email, phone, service, date, time, and optionally a treatment area and note. Click Confirm booking. The booking is created and immediately confirmed — it appears on the calendar right away.
+
+If the client does not already have an account, one is created automatically using the email you provide.
+
+**Clients**
+
+Click Clients in the left sidebar to see the full client roster. Use the search bar to find a client by name or email. Click any row to open that client's profile.
+
+**Client profile**
+
+The profile page has four tabs.
+
+The Bookings tab shows all appointments for that client. Confirmed bookings have Complete and No-show action buttons. Clicking No-show marks the booking and automatically creates a $20 no-show fee in the Fees tab.
+
+The Sessions tab shows all logged session records. At the top of the tab is a form to log a new session. Fill in the date and time, add notes, click Add area to add one or more treatment areas each with their own intensity level, then click Save session.
+
+The Photos tab lets you upload before, after, or progress photos for the client. Select the photo type and treatment area, then click the upload zone to choose a file. Uploaded photos appear in a grid below and are visible to the client in their portal. Click the X on any photo to delete it.
+
+The Fees tab shows any outstanding no-show fees. Each fee can be marked as Paid or Waived. If waiving, you can enter a reason.
+
+---
+
+## Tech Stack
+
+**Frontend** — Vanilla HTML, CSS, JavaScript split into modular files per feature. No framework.
+
+**Backend** — FastAPI (Python), async REST API, JWT authentication, bcrypt password hashing.
+
+**Database** — PostgreSQL on AWS RDS. Includes a trigger that automatically creates a $20 no-show fee record when a booking is marked no-show.
+
+**Infrastructure** — AWS EC2 (backend), AWS RDS PostgreSQL (database), AWS S3 and CloudFront (frontend and CDN).
+
+---
+
+## Project Structure
 
 ```
-premier/
+premier-electrolysis/
 ├── backend/
-│   ├── main.py                   ← FastAPI entry point
-│   ├── database.py               ← SQLAlchemy async engine
-│   ├── models.py                 ← ORM models
-│   ├── auth_utils.py             ← JWT + password hashing
-│   ├── requirements.txt
-│   ├── .env.example
+│   ├── main.py
+│   ├── database.py
+│   ├── models.py
+│   ├── auth_utils.py
 │   └── routers/
-│       ├── auth.py               ← login, register, me
-│       ├── bookings.py           ← booking CRUD + calendar
-│       ├── sessions.py           ← session records + areas
-│       ├── clients.py            ← owner client management
-│       ├── photos.py             ← S3 upload/delete
-│       └── availability.py      ← hours + slot generation
+│       ├── auth.py
+│       ├── bookings.py
+│       ├── sessions.py
+│       ├── clients.py
+│       ├── photos.py
+│       └── availability.py
 ├── frontend/
-│   ├── client/index.html         ← client portal
-│   └── owner/index.html          ← owner portal
-├── schema.sql                    ← run this first
-├── render.yaml                   ← Render deployment config
-├── netlify.toml                  ← Netlify redirect config
-└── .gitignore
+│   ├── public/
+│   │   └── index.html
+│   ├── client/
+│   │   ├── index.html
+│   │   ├── css/styles.css
+│   │   └── js/
+│   │       ├── auth.js
+│   │       ├── booking.js
+│   │       └── data.js
+│   └── owner/
+│       ├── index.html
+│       ├── css/styles.css
+│       └── js/
+│           ├── auth.js
+│           ├── calendar.js
+│           ├── bookings.js
+│           └── clients.js
+└── schema.sql
 ```
 
 ---
 
-## Step 1 — Local setup
-
-```bash
-# Clone / create repo
-git init && git add . && git commit -m "initial"
-
-# Install backend dependencies
-cd backend
-pip install -r requirements.txt
-
-# Create local Postgres DB
-createdb premier
-psql -d premier -f ../schema.sql
-
-# Set environment variables
-cp .env.example .env
-# Edit .env — set DATABASE_URL, SECRET_KEY, S3 credentials
-
-# Run backend
-uvicorn main:app --reload --port 8000
-```
-
-Visit http://localhost:8000 — should return `{"status":"ok"}`
-
-Interactive API docs: http://localhost:8000/docs
-
----
-
-## Step 2 — Set owner password
-
-After running schema.sql, set Ambar's password:
-
-```bash
-curl -X POST http://localhost:8000/auth/set-password \
-  -H "Content-Type: application/json" \
-  -d '{"email":"ambar@premierelectrolysis.com","password":"ChooseAStrongPassword"}'
-```
-
----
-
-## Step 3 — Test locally
-
-Open `frontend/owner/index.html` in a browser.
-Log in with ambar@premierelectrolysis.com + the password you just set.
-
-Open `frontend/client/index.html` in a browser.
-Register a test client account.
-
-Submit a booking request from the client portal.
-Confirm it from the owner portal.
-Log a session with treatment areas.
-Upload a photo — it will go to S3 (configure first) or fail gracefully.
-
----
-
-## Step 4 — Set up S3 or Cloudflare R2
-
-### AWS S3 (standard)
-1. Create bucket: `premier-electrolysis-photos`
-2. Uncheck "Block all public access"
-3. Add bucket policy allowing public read:
-```json
-{
-  "Version":"2012-10-17",
-  "Statement":[{
-    "Effect":"Allow",
-    "Principal":"*",
-    "Action":"s3:GetObject",
-    "Resource":"arn:aws:s3:::premier-electrolysis-photos/*"
-  }]
-}
-```
-4. Create IAM user with S3 full access, copy keys to .env
-
-### Cloudflare R2 (cheaper — no egress fees)
-1. Create R2 bucket: `premier-electrolysis-photos`
-2. Enable public access on the bucket
-3. Create R2 API token with Object Read & Write
-4. Set in .env:
-```
-S3_ENDPOINT=https://<account_id>.r2.cloudflarestorage.com
-S3_REGION=auto
-AWS_ACCESS_KEY_ID=<r2_access_key>
-AWS_SECRET_ACCESS_KEY=<r2_secret>
-```
-
----
-
-## Step 5 — Deploy backend to Render
-
-1. Push everything to GitHub
-2. Go to https://render.com → New → Web Service
-3. Connect your GitHub repo
-4. Build command: `pip install -r backend/requirements.txt`
-5. Start command: `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
-6. Set root directory to `backend`
-7. Add environment variables from .env
-8. Create a PostgreSQL database on Render and connect it
-9. Run schema.sql against the Render DB:
-   ```bash
-   psql <render_db_connection_string> -f schema.sql
-   ```
-10. Set owner password against the live URL
-
----
-
-## Step 6 — Deploy frontends to Netlify
-
-Deploy two separate sites:
-
-**Client portal:**
-- Drag and drop `frontend/client/` folder to Netlify
-- Site name: `premier-electrolysis-client` or similar
-- Update `const API = '...'` in `client/index.html` to your Render URL
-
-**Owner portal:**
-- Drag and drop `frontend/owner/` folder to Netlify
-- Site name: `premier-electrolysis-owner`
-- Update `const API = '...'` in `owner/index.html` to your Render URL
-- Share this URL only with Ambar
-
-**Public site:**
-- Deploy `premier_electrolysis.html` (rename to `index.html`) to Netlify
-- This is the main public-facing site
-
----
-
-## Step 7 — Custom domain (optional)
-
-1. In Netlify: Site settings → Domain management → Add custom domain
-2. Example: `book.premierelectrolysis.com` for client portal
-3. In Cloudflare (or wherever domain is registered):
-   - Add CNAME record: `book` → `<netlify-subdomain>.netlify.app`
-4. Netlify auto-provisions HTTPS via Let's Encrypt
-
----
-
-## API reference (key endpoints)
-
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | /auth/login | — | Get JWT token |
-| POST | /auth/register | — | New client account |
-| GET | /auth/me | client | Current user |
-| POST | /bookings/request | — | Public booking form |
-| GET | /bookings/mine | client | Client's bookings |
-| GET | /bookings/calendar?year=&month= | owner | Calendar view |
-| PATCH | /bookings/{id}/status | owner | Confirm/complete/no-show |
-| GET | /availability/slots?date= | — | Available times for a day |
-| GET | /sessions/mine | client | Client session history |
-| POST | /sessions | owner | Log a session |
-| GET | /clients | owner | All clients |
-| GET | /clients/{id} | owner | Client profile |
-| POST | /photos/upload/{client_id} | owner | Upload photo |
-| GET | /photos/mine | client | Client's visible photos |
-
-Full interactive docs at: `<your-render-url>/docs`
-
----
-
-## Going live checklist
-
-- [ ] schema.sql applied to production DB
-- [ ] Owner password set on production
-- [ ] S3/R2 bucket created with public read
-- [ ] All `const API = 'http://localhost:8000'` updated to Render URL in both portals
-- [ ] `ALLOWED_ORIGINS` in .env includes production domain
-- [ ] Tested booking flow end-to-end: request → confirm → session log → photo upload
-- [ ] Tested no-show trigger: mark booking no_show → fee appears in client profile
+Built by Ileana Pineda
