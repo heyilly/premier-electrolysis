@@ -1,5 +1,5 @@
 // ── CONFIG ────────────────────────────────────────────────────────────────────
-const API = 'http://98.84.133.32';
+const API = 'https://d4yqdbub69k9y.cloudfront.net/api';
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
