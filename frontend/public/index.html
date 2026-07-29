@@ -461,6 +461,211 @@ footer{
   transition:background 0.2s;
 }
 .btn-dark:hover{background:#2a2820}
+
+/* ══════════════════════════════════════════
+   MOBILE STYLES  (max-width: 768px)
+══════════════════════════════════════════ */
+
+/* ── Hamburger button ── */
+.nav-hamburger{
+  display:none;
+  flex-direction:column;justify-content:center;align-items:center;
+  width:40px;height:40px;cursor:pointer;gap:5px;
+  background:none;border:none;padding:0;
+}
+.nav-hamburger span{
+  display:block;width:22px;height:1.5px;
+  background:var(--gold);
+  transition:transform 0.25s,opacity 0.25s;
+}
+.nav-hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* ── Mobile drawer ── */
+.mobile-drawer{
+  display:none;
+  position:fixed;top:64px;left:0;right:0;bottom:0;
+  background:rgba(28,26,23,0.98);
+  z-index:99;
+  flex-direction:column;
+  padding:32px 32px 40px;
+  overflow-y:auto;
+  transform:translateY(-8px);
+  opacity:0;
+  transition:transform 0.25s ease,opacity 0.25s ease;
+  pointer-events:none;
+}
+.mobile-drawer.open{
+  transform:translateY(0);
+  opacity:1;
+  pointer-events:auto;
+}
+.mobile-nav-link{
+  font-family:var(--serif);font-weight:300;font-size:28px;
+  color:rgba(245,241,234,0.7);text-decoration:none;
+  padding:14px 0;border-bottom:1px solid rgba(196,169,109,0.1);
+  display:block;letter-spacing:0.02em;
+  transition:color 0.15s;
+}
+.mobile-nav-link:hover,.mobile-nav-link.active{color:var(--gold)}
+.mobile-nav-link em{font-style:italic;color:var(--gold)}
+.mobile-cta-wrap{margin-top:32px}
+.mobile-cta{
+  display:block;text-align:center;
+  font-size:10px;letter-spacing:0.28em;text-transform:uppercase;
+  border:1px solid var(--gold);color:var(--gold);
+  padding:14px 24px;text-decoration:none;margin-bottom:12px;
+}
+.mobile-portal-links{display:flex;gap:10px;margin-top:4px}
+.mobile-portal-link{
+  flex:1;text-align:center;font-size:9px;letter-spacing:0.2em;
+  text-transform:uppercase;border:1px solid rgba(196,169,109,0.3);
+  color:rgba(196,169,109,0.6);padding:10px 8px;text-decoration:none;
+}
+.mobile-contact{
+  margin-top:32px;padding-top:24px;
+  border-top:1px solid rgba(196,169,109,0.1);
+}
+.mobile-contact p{font-size:12px;color:var(--stone);line-height:1.8}
+.mobile-contact a{color:var(--gold);text-decoration:none;font-size:13px;display:block;margin-top:4px}
+
+@media(max-width:768px){
+
+  /* nav */
+  nav{padding:0 20px;height:60px}
+  .nav-links{display:none}
+  .nav-cta{display:none}
+  .nav-hamburger{display:flex}
+  .mobile-drawer{display:flex}
+  .page{padding-top:60px}
+
+  /* hero */
+  .hero{
+    min-height:85vh;
+    padding:48px 24px 48px;
+    justify-content:flex-end;
+  }
+  .hero h1{font-size:clamp(36px,9vw,56px);max-width:100%}
+  .hero-sub{font-size:13px;max-width:100%}
+  .hero-rule{height:40px;margin-bottom:20px}
+  .hero-actions{flex-direction:column;gap:10px;align-items:flex-start}
+  .hero-actions .btn-primary,.hero-actions .btn-ghost{width:100%;text-align:center;padding:14px 20px}
+  .hero-meta{
+    position:static;text-align:left;
+    margin-top:32px;padding-top:20px;
+    border-top:1px solid rgba(196,169,109,0.15);
+  }
+
+  /* stat bar */
+  .stat-bar-wrap{padding:28px 24px;flex-wrap:wrap;gap:24px}
+
+  /* strips — stack vertically */
+  .strip{grid-template-columns:1fr !important}
+  .strip-content{padding:40px 24px}
+  .strip-img-placeholder{min-height:240px}
+
+  /* sections */
+  .section{padding:48px 24px}
+  .section.alt{padding:48px 24px}
+  .section.dark{padding:48px 24px}
+
+  /* service grid */
+  .service-grid{grid-template-columns:1fr !important}
+
+  /* equipment grid */
+  .equip-grid{grid-template-columns:1fr !important;gap:28px}
+
+  /* pricing grid */
+  .pricing-grid{grid-template-columns:1fr 1fr !important}
+
+  /* benefits grid */
+  .benefits-grid{grid-template-columns:1fr !important}
+
+  /* reviews grid */
+  .reviews-grid{grid-template-columns:1fr !important}
+
+  /* review hero */
+  .review-hero-quote{padding:48px 24px}
+  .review-hero-quote blockquote{font-size:clamp(20px,5vw,30px)}
+
+  /* rating summary */
+  .rating-summary{flex-direction:column;gap:20px;align-items:center}
+
+  /* before/after gallery */
+  .ba-grid{grid-template-columns:1fr !important;margin:0 0 24px !important}
+  .ba-disclaimer{padding:24px}
+
+  /* about grid */
+  .about-grid{grid-template-columns:1fr !important}
+  .about-portrait{min-height:260px}
+  .about-bio{padding:36px 24px}
+
+  /* appointment grid */
+  .appt-grid{grid-template-columns:1fr !important;min-height:auto}
+  .appt-left{padding:40px 24px}
+  .appt-right{padding:36px 24px}
+
+  /* form row */
+  .form-row{grid-template-columns:1fr !important}
+
+  /* CTA banner */
+  .cta-banner{
+    flex-direction:column;gap:20px;
+    padding:40px 24px;
+    text-align:center;
+  }
+  .cta-banner h2{font-size:clamp(20px,5vw,30px)}
+  .cta-banner .btn-dark{margin-left:0;width:100%;text-align:center;padding:14px 20px}
+
+  /* footer */
+  footer{padding:40px 24px 28px}
+  .footer-grid{grid-template-columns:1fr !important;gap:28px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+
+  /* page header */
+  .page-header{padding:48px 24px 40px}
+  .page-header h1{font-size:clamp(30px,7vw,48px)}
+
+  /* gold divider */
+  .gold-divider{padding:0 24px}
+
+  /* stat row inside strip */
+  .stat-row{gap:24px;flex-wrap:wrap}
+
+  /* inline stat bar on home dark strip */
+  div[style*="padding:40px 80px"]{padding:28px 24px !important}
+  div[style*="gap:64px"]{gap:20px !important;flex-wrap:wrap !important}
+
+  /* credentials */
+  .credentials{padding-top:20px}
+  .credential{flex-direction:column;gap:4px}
+
+  /* about philosophy grid */
+  div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr !important}
+
+  /* ba img pair */
+  .ba-pair{grid-template-columns:1fr 1fr}
+  .ba-img{min-height:180px !important}
+
+  /* treatment area tags */
+  div[style*="display:flex;flex-wrap:wrap"]{gap:6px !important}
+
+  /* equipment dark grid */
+  div.section.dark > div[style*="grid-template-columns:1fr 1fr"]{
+    grid-template-columns:1fr !important;gap:24px;
+  }
+
+  /* booking step flow */
+  .bk-svc-card{padding:14px}
+  .bk-time{padding:10px 4px;font-size:11px}
+  .bk-times{grid-template-columns:repeat(3,1fr) !important}
+}
+
+@media(max-width:420px){
+  .pricing-grid{grid-template-columns:1fr !important}
+  .hero h1{font-size:32px}
+}
 </style>
 </head>
 <body>
@@ -477,8 +682,32 @@ footer{
   </ul>
   <a class="nav-cta" href="/client/index.html" style="margin-right:8px">Client login</a>
   <a class="nav-cta" href="/owner/index.html" style="background:none;border-color:rgba(196,169,109,0.4);color:rgba(196,169,109,0.7)">Owner</a>
-  <a class="nav-cta" href="#" onclick="showPage('appointments')">Book a session</a>
+  <button class="nav-hamburger" id="hamburger" onclick="toggleDrawer()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile drawer -->
+<div class="mobile-drawer" id="mobile-drawer">
+  <a class="mobile-nav-link" href="#" onclick="showPage('home');closeDrawer()">Home</a>
+  <a class="mobile-nav-link" href="#" onclick="showPage('service');closeDrawer()" id="mnav-service">The <em>Treatment</em></a>
+  <a class="mobile-nav-link" href="#" onclick="showPage('equipment');closeDrawer()" id="mnav-equipment">Equipment</a>
+  <a class="mobile-nav-link" href="#" onclick="showPage('pricing');closeDrawer()" id="mnav-pricing">Pricing</a>
+  <a class="mobile-nav-link" href="#" onclick="showPage('reviews');closeDrawer()" id="mnav-reviews">Reviews</a>
+  <a class="mobile-nav-link" href="#" onclick="showPage('gallery');closeDrawer()" id="mnav-gallery">Results</a>
+  <a class="mobile-nav-link" href="#" onclick="showPage('about');closeDrawer()" id="mnav-about">About</a>
+  <div class="mobile-cta-wrap">
+    <a class="mobile-cta" href="#" onclick="showPage('appointments');closeDrawer()">Reserve a session</a>
+    <div class="mobile-portal-links">
+      <a class="mobile-portal-link" href="/client/index.html">Client login</a>
+      <a class="mobile-portal-link" href="/owner/index.html">Owner</a>
+    </div>
+  </div>
+  <div class="mobile-contact">
+    <p>3057 W. Holcombe Blvd · Suite 104 · Houston, TX</p>
+    <a href="tel:+13467041825">(346) 704-1825</a>
+  </div>
+</div>
 
 <!-- ══════════════════════ HOME ══════════════════════ -->
 <div id="page-home" class="page active">
@@ -1435,12 +1664,31 @@ function bkConfirm(){
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll('.mobile-nav-link').forEach(a => a.classList.remove('active'));
   var page = document.getElementById('page-' + id);
   if (page) { page.classList.add('active'); window.scrollTo(0,0); }
   var navEl = document.getElementById('nav-' + id);
   if (navEl) navEl.classList.add('active');
+  var mnavEl = document.getElementById('mnav-' + id);
+  if (mnavEl) mnavEl.classList.add('active');
   if(id==='appointments'){bkGo(1);}
 }
+
+function toggleDrawer(){
+  var drawer = document.getElementById('mobile-drawer');
+  var btn    = document.getElementById('hamburger');
+  var open   = drawer.classList.contains('open');
+  drawer.classList.toggle('open', !open);
+  btn.classList.toggle('open', !open);
+  document.body.style.overflow = open ? '' : 'hidden';
+}
+
+function closeDrawer(){
+  document.getElementById('mobile-drawer').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
 document.querySelectorAll('.nav-links a, .nav-cta, .btn-ghost, .btn-dark, footer a').forEach(function(a){
   a.addEventListener('click', function(e){ if(this.getAttribute('href') === '#') e.preventDefault(); });
 });
